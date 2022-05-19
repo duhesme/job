@@ -1,29 +1,28 @@
 import Foundation
 
-struct Item {
+struct Item: Hashable {
     var itemId: Int
     var name: String
     var price: Float
-    var count: Int
 }
 
 class Order {
 
-    var items: [Int: Item] = [:]
+    var items: [Item: Int] = [:]
     var deleteBlock: (()->(Void))?
     var timer: Timer?
 
     /// сумма заказа
     var total: Float {
-        return items.map({$0.value}).map({$0.price}).reduce(0, +)
+        return items.map({$0.key.price * Float($0.value)}).reduce(0, +)
     }
     
     ///  Добавить товар к заказу
     func put(item: Item) {
-        if items[item.itemId] == nil {
-            items[item.itemId] = item
+        if items[item] == nil {
+            items[item] = 0
         } else {
-            items[item.itemId]!.count += item.count
+            items[item]! += 1
         }
     }
     
@@ -32,7 +31,7 @@ class Order {
         var data: [[String: Int]] = []
         
         data = items.map { item in
-            [String(item.key): item.value.count]
+            [String(item.key.itemId): item.value]
         }
         
         return data
