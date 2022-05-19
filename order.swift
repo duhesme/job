@@ -20,7 +20,7 @@ class Order {
     ///  Добавить товар к заказу
     func put(item: Item) {
         if items[item] == nil {
-            items[item] = 0
+            items[item] = 1
         } else {
             items[item]! += 1
         }
